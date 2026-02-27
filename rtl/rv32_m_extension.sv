@@ -52,7 +52,7 @@ module rv32_m_extension (
     assign mul_su = a_signed * $signed({1'b0, operand_b});
     assign mul_uu = operand_a * operand_b;
 
-    always_comb begin
+    always @(*) begin
         m_result = {XLEN{1'b0}};
 
         if (m_valid) begin

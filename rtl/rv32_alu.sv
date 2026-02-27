@@ -36,7 +36,7 @@ module rv32_alu (
     logic [4:0] shamt;
     assign shamt = operand_b[4:0];
 
-    always_comb begin
+    always @(*) begin
         unique case (alu_op)
             ALU_ADD   : result = operand_a + operand_b;
             ALU_SUB   : result = operand_a - operand_b;

@@ -51,7 +51,7 @@ module rv32_control_unit (
     // -------------------------------------------------------------------
     // Main decode — purely combinational
     // -------------------------------------------------------------------
-    always_comb begin
+    always @(*) begin
         // Safe defaults — NOP-like (do nothing, no writes)
         reg_write  = 1'b0;
         mem_read   = 1'b0;
@@ -134,7 +134,7 @@ module rv32_control_unit (
                 alu_op    = ALU_ADD;
                 wb_sel    = WB_MEM;
                 imm_type  = IMM_I;
-                mem_size  = mem_size_e'(funct3);
+                mem_size  = funct3;
             end
 
             // =============================================================
@@ -145,7 +145,7 @@ module rv32_control_unit (
                 alu_src   = 1'b1;         // rs1 + imm → address
                 alu_op    = ALU_ADD;
                 imm_type  = IMM_S;
-                mem_size  = mem_size_e'(funct3);
+                mem_size  = funct3;
             end
 
             // =============================================================
@@ -166,7 +166,10 @@ module rv32_control_unit (
                     3'b110: alu_op = ALU_OR;    // ORI
                     3'b111: alu_op = ALU_AND;   // ANDI
                     3'b001: alu_op = ALU_SLL;   // SLLI
-                    3'b101: alu_op = (funct7[5]) ? ALU_SRA : ALU_SRL; // SRAI / SRLI
+                    3'b101: begin
+                        if (funct7[5]) alu_op = ALU_SRA;
+                        else           alu_op = ALU_SRL;
+                    end // SRAI / SRLI
                     default: alu_op = ALU_ADD;
                 endcase
             end
@@ -183,17 +186,23 @@ module rv32_control_unit (
                 if (funct7 == 7'b0000001) begin
                     // ---- M-extension operations ----
                     m_valid  = 1'b1;
-                    m_op     = m_op_e'(funct3);
+                    m_op     = funct3;
                     wb_sel   = WB_MEXT;
                 end else begin
                     // ---- Base RV32I register-register ----
                     unique case (funct3)
-                        3'b000: alu_op = (funct7[5]) ? ALU_SUB : ALU_ADD;
+                        3'b000: begin
+                            if (funct7[5]) alu_op = ALU_SUB;
+                            else           alu_op = ALU_ADD;
+                        end
                         3'b001: alu_op = ALU_SLL;
                         3'b010: alu_op = ALU_SLT;
                         3'b011: alu_op = ALU_SLTU;
                         3'b100: alu_op = ALU_XOR;
-                        3'b101: alu_op = (funct7[5]) ? ALU_SRA : ALU_SRL;
+                        3'b101: begin
+                            if (funct7[5]) alu_op = ALU_SRA;
+                            else           alu_op = ALU_SRL;
+                        end
                         3'b110: alu_op = ALU_OR;
                         3'b111: alu_op = ALU_AND;
                         default: alu_op = ALU_ADD;

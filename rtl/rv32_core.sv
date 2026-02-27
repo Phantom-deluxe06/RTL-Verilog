@@ -134,7 +134,7 @@ module rv32_core (
     // =================================================================
     //  PC source mux logic
     // =================================================================
-    always_comb begin
+    always @(*) begin
         if (irq)
             pc_src = PC_IRQ;
         else if (jump)
@@ -152,7 +152,7 @@ module rv32_core (
     //  • JAL:    PC + imm_J
     //  • JALR:   (rs1 + imm_I) & ~1
     // =================================================================
-    always_comb begin
+    always @(*) begin
         if (is_jalr)
             branch_target = (rs1_data + imm_val) & ~32'd1;   // JALR: mask LSB
         else
@@ -181,7 +181,7 @@ module rv32_core (
     logic [XLEN-1:0] mem_load_data;
 
     // Load data sign/zero extension
-    always_comb begin
+    always @(*) begin
         unique case (mem_size)
             MEM_BYTE:   mem_load_data = {{24{data_rdata[7]}},  data_rdata[7:0]};
             MEM_HALF:   mem_load_data = {{16{data_rdata[15]}}, data_rdata[15:0]};
@@ -192,7 +192,7 @@ module rv32_core (
         endcase
     end
 
-    always_comb begin
+    always @(*) begin
         unique case (wb_sel)
             WB_ALU  : rd_data = alu_result;
             WB_MEM  : rd_data = mem_load_data;
@@ -213,7 +213,7 @@ module rv32_core (
         .rst_n         (rst_n),
         .pc_src        (pc_src),
         .branch_target (branch_target),
-        .irq_vector    (IRQ_VECTOR),
+        .irq_vector    (32'h0000_0100),
         .stall         (stall),
         .pc_out        (pc_out),
         .pc_plus4      (pc_plus4)

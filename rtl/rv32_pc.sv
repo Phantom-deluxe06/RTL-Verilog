@@ -44,7 +44,7 @@ module rv32_pc (
     // In the critical path this mux resolves AFTER the branch unit and
     // ALU have determined whether a branch/jump is taken.
     // -----------------------------------------------------------------
-    always_comb begin
+    always @(*) begin
         unique case (pc_src)
             PC_PLUS4  : pc_next = pc_plus4;       // Normal sequential fetch
             PC_BRANCH : pc_next = branch_target;   // Conditional branch taken

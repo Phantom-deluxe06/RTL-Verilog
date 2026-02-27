@@ -93,7 +93,7 @@ module rv32_soc_top (
     logic [XLEN-1:0]  mem_wdata;
     logic              mem_we;
 
-    always_comb begin
+    always @(*) begin
         if (dma_req) begin
             mem_addr  = dma_addr;
             mem_wdata = dma_wdata;

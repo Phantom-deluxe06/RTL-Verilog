@@ -16,7 +16,7 @@ module rv32_imm_gen (
     output logic [XLEN-1:0]  imm_out        // Sign-extended immediate
 );
 
-    always_comb begin
+    always @(*) begin
         unique case (imm_type)
             // ---------------------------------------------------------------
             // I-type: inst[31:20]  (12 bits, sign-extended)

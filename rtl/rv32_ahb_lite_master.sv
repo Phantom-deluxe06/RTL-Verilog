@@ -82,7 +82,7 @@ module rv32_ahb_lite_master (
     assign data_access = data_read | data_write;
 
     // Address phase
-    always_comb begin
+    always @(*) begin
         if (data_access) begin
             HADDR  = data_addr;
             HWRITE = data_write;

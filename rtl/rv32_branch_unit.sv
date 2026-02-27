@@ -23,7 +23,7 @@ module rv32_branch_unit (
     assign rs1_signed = $signed(rs1_data);
     assign rs2_signed = $signed(rs2_data);
 
-    always_comb begin
+    always @(*) begin
         branch_taken = 1'b0;
 
         if (branch_en) begin
