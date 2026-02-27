@@ -57,12 +57,17 @@ module rv32_soc_top (
     // =================================================================
     //  CPU Core
     // =================================================================
+    logic [XLEN-1:0] instr_addr;
+    logic [XLEN-1:0] instr_rdata;
+
     rv32_core u_core (
-        .clk       (clk),
-        .rst_n     (rst_n),
-        .irq       (irq),
-        .dma_stall (dma_stall),
-        .HADDR     (HADDR),
+        .clk         (clk),
+        .rst_n       (rst_n),
+        .irq         (irq),
+        .dma_stall   (dma_stall),
+        .instr_addr  (instr_addr),
+        .instr_rdata (instr_rdata),
+        .HADDR       (HADDR),
         .HSIZE     (HSIZE),
         .HTRANS    (HTRANS),
         .HWRITE    (HWRITE),
@@ -141,11 +146,16 @@ module rv32_soc_top (
 
     // -----------------------------------------------------------------
     //  SRAM read — combinational (for single-cycle access)
+    //  DUAL PORT: One for Data/DMA, one for Instruction Fetch
     // -----------------------------------------------------------------
     logic [XLEN-1:0] mem_rdata;
     assign mem_rdata = sram[word_addr];
 
-    // Route read data to CPU and DMA
+    logic [13:0] instr_word_addr;
+    assign instr_word_addr = instr_addr[15:2];
+    assign instr_rdata = sram[instr_word_addr];
+
+    // Route data read to CPU and DMA
     assign HRDATA   = mem_rdata;
     assign dma_rdata = mem_rdata;
 

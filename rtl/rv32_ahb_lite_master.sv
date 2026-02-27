@@ -31,14 +31,12 @@ module rv32_ahb_lite_master (
     input  logic             rst_n,
 
     // --- CPU-side interface (from datapath) ---
-    input  logic [XLEN-1:0]  instr_addr,    // Instruction fetch address (PC)
     input  logic [XLEN-1:0]  data_addr,     // Load/store address (ALU result)
     input  logic [XLEN-1:0]  data_wdata,    // Store write data (rs2)
     input  logic             data_read,     // Load request
     input  logic             data_write,    // Store request
     input  logic [2:0]       data_size,     // Byte / Half / Word
 
-    output logic [XLEN-1:0]  instr_rdata,   // Fetched instruction word
     output logic [XLEN-1:0]  data_rdata,    // Load read data
     output logic             bus_stall,     // Stall CPU (slave not ready)
 
@@ -93,10 +91,10 @@ module rv32_ahb_lite_master (
                 default:              HSIZE = AHB_SIZE_WORD;
             endcase
         end else begin
-            HADDR  = instr_addr;
+            HADDR  = 32'b0;
             HWRITE = 1'b0;
-            HTRANS = AHB_NONSEQ;
-            HSIZE  = AHB_SIZE_WORD;  // Instructions are always 32-bit
+            HTRANS = AHB_IDLE; // Idle when no data access
+            HSIZE  = AHB_SIZE_WORD;
         end
     end
 
@@ -104,7 +102,6 @@ module rv32_ahb_lite_master (
     assign HWDATA = data_wdata;
 
     // Read data routing
-    assign instr_rdata = HRDATA;     // Instruction read from bus
     assign data_rdata  = HRDATA;     // Data read from bus
 
     // Stall when slave is not ready

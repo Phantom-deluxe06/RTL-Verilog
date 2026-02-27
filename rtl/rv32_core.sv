@@ -59,6 +59,10 @@ module rv32_core (
     input  logic             irq,           // Interrupt request (from AI Accelerator)
     input  logic             dma_stall,     // DMA bus-hold: stall CPU
 
+    // --- Dedicated Instruction Fetch Port ---
+    output logic [XLEN-1:0]  instr_addr,
+    input  logic [XLEN-1:0]  instr_rdata,
+
     // --- AHB-Lite master ports (connect to SoC interconnect) ---
     output logic [XLEN-1:0]  HADDR,
     output logic [2:0]       HSIZE,
@@ -83,6 +87,8 @@ module rv32_core (
 
     // Instruction
     logic [XLEN-1:0] instruction;
+    assign instr_addr = pc_out;
+    assign instruction = instr_rdata;
 
     // Control signals
     logic             reg_write;
@@ -288,13 +294,11 @@ module rv32_core (
     rv32_ahb_lite_master u_ahb (
         .clk           (clk),
         .rst_n         (rst_n),
-        .instr_addr    (pc_out),
         .data_addr     (alu_result),
         .data_wdata    (rs2_data),
         .data_read     (mem_read),
         .data_write    (mem_write),
         .data_size     (mem_size),
-        .instr_rdata   (instruction),
         .data_rdata    (data_rdata),
         .bus_stall     (bus_stall),
         .HADDR         (HADDR),

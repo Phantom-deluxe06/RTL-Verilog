@@ -47,7 +47,13 @@ module rv32_register_file (
     // -----------------------------------------------------------------
     logic [XLEN-1:0] reg_file [31:1];
 
-    // -----------------------------------------------------------------
+    // Initialize register file to zero for cleaner simulation traces
+    integer i;
+    initial begin
+        for (i = 1; i < 32; i++) reg_file[i] = 32'b0;
+    end
+
+    // Read ports (asynchronous)-----------------------------------------------------------------
     // Asynchronous reads — combinational mux with x0 = 0 guard
     // -----------------------------------------------------------------
     assign rs1_data = (rs1_addr == 5'b0) ? {XLEN{1'b0}} : reg_file[rs1_addr];

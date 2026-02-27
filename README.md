@@ -41,6 +41,9 @@ The design relies on a pure single-cycle execution model without pipelined regis
 ├── tb/                         # Testbenches and Simulation
 │   └── rv32_tb.sv              # Preloaded firmware and self-checking core verification
 │
+├── files.txt                   # List of source files for easy compilation
+├── sim.out                     # Pre-compiled Icarus Verilog standard simulation runtime
+├── infinity_sim.out            # Pre-compiled Icarus Verilog continuous simulation runtime
 └── README.md                   # Project documentation
 ```
 
@@ -83,21 +86,11 @@ To simulate this design offline, you will need a SystemVerilog simulator. [Icaru
    ```
 
 2. **Compile the RTL and Testbench using Icarus Verilog:**
+   You can compile the design conveniently using the provided `files.txt` list:
    ```bash
-   iverilog -g2012 -o sim.out \
-       rtl/pkg_rv32_types.sv \
-       rtl/rv32_pc.sv \
-       rtl/rv32_register_file.sv \
-       rtl/rv32_imm_gen.sv \
-       rtl/rv32_alu.sv \
-       rtl/rv32_m_extension.sv \
-       rtl/rv32_control_unit.sv \
-       rtl/rv32_branch_unit.sv \
-       rtl/rv32_ahb_lite_master.sv \
-       rtl/rv32_core.sv \
-       rtl/rv32_soc_top.sv \
-       tb/rv32_tb.sv
+   iverilog -g2012 -o sim.out -f files.txt
    ```
+   *(Note: Pre-compiled runtimes `sim.out` and `infinity_sim.out` are already included in the repository for immediate testing).*
 
 3. **Run the simulation:**
    ```bash

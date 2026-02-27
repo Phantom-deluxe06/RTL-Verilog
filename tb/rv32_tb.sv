@@ -124,7 +124,7 @@ module rv32_tb;
         u_soc.sram[11] = 32'h12345637;
         // SW   x3, 0x400(x0)     (S-type: offset=0x400=1024)
         // imm[11:5]=0100000, rs2=3(x3), rs1=0(x0), funct3=010, imm[4:0]=00000
-        u_soc.sram[12] = 32'h20302023;
+        u_soc.sram[12] = 32'h40302023;
         // LW   x13, 0x400(x0)    (I-type: imm=0x400)
         u_soc.sram[13] = 32'h40002683;
         // BEQ  x3, x13, +8       (B-type: offset=8 → imm[12|10:5]=0, imm[4:1|11]=0100)
@@ -136,7 +136,7 @@ module rv32_tb;
         u_soc.sram[16] = 32'h04200793;
         // JAL  x16, +8           (J-type: offset=8, rd=x16)
         // Jump from 0x44 to 0x4C.  imm=8 → {0, 0000000100, 0, 00000000, rd=10000, 1101111}
-        u_soc.sram[17] = 32'h008000EF;
+        u_soc.sram[17] = 32'h0080086F;
         // ADDI x17, x0, 0xFF     (SKIPPED by JAL)
         u_soc.sram[18] = 32'h0FF00893;
         // ADDI x18, x0, 0x55     (JAL target: addr 0x4C)
