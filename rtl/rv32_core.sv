@@ -92,9 +92,9 @@ module rv32_core (
     wb_sel_e          wb_sel;
     logic             branch_en, jump, is_jalr;
     imm_type_e        imm_type;
-    mem_size_e        mem_size;
+    logic [2:0]      mem_size;
     logic             m_valid;
-    m_op_e            m_op;
+    logic [2:0]      m_op;
 
     // Register file
     logic [REG_ADDR_W-1:0] rs1_addr, rs2_addr, rd_addr;
@@ -182,7 +182,7 @@ module rv32_core (
 
     // Load data sign/zero extension
     always @(*) begin
-        unique case (mem_size)
+        case (mem_size)
             MEM_BYTE:   mem_load_data = {{24{data_rdata[7]}},  data_rdata[7:0]};
             MEM_HALF:   mem_load_data = {{16{data_rdata[15]}}, data_rdata[15:0]};
             MEM_WORD:   mem_load_data = data_rdata;
@@ -193,7 +193,7 @@ module rv32_core (
     end
 
     always @(*) begin
-        unique case (wb_sel)
+        case (wb_sel)
             WB_ALU  : rd_data = alu_result;
             WB_MEM  : rd_data = mem_load_data;
             WB_PC4  : rd_data = pc_plus4;

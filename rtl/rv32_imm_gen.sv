@@ -17,7 +17,7 @@ module rv32_imm_gen (
 );
 
     always @(*) begin
-        unique case (imm_type)
+        case (imm_type)
             // ---------------------------------------------------------------
             // I-type: inst[31:20]  (12 bits, sign-extended)
             //   Used by: ADDI, SLTI, ANDI, ORI, XORI, LW, LH, LB, JALR

@@ -118,9 +118,9 @@ module rv32_soc_top (
 
     always_ff @(posedge clk) begin
         if (mem_we) begin
-            unique case (active_size)
+            case (active_size)
                 AHB_SIZE_BYTE: begin
-                    unique case (mem_addr[1:0])
+                    case (mem_addr[1:0])
                         2'b00: sram[word_addr][7:0]   <= mem_wdata[7:0];
                         2'b01: sram[word_addr][15:8]  <= mem_wdata[7:0];
                         2'b10: sram[word_addr][23:16] <= mem_wdata[7:0];

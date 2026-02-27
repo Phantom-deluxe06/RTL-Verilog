@@ -45,7 +45,7 @@ module rv32_pc (
     // ALU have determined whether a branch/jump is taken.
     // -----------------------------------------------------------------
     always @(*) begin
-        unique case (pc_src)
+        case (pc_src)
             PC_PLUS4  : pc_next = pc_plus4;       // Normal sequential fetch
             PC_BRANCH : pc_next = branch_target;   // Conditional branch taken
             PC_JUMP   : pc_next = branch_target;   // JAL / JALR

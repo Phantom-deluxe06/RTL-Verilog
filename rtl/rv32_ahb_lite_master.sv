@@ -36,7 +36,7 @@ module rv32_ahb_lite_master (
     input  logic [XLEN-1:0]  data_wdata,    // Store write data (rs2)
     input  logic             data_read,     // Load request
     input  logic             data_write,    // Store request
-    input  mem_size_e        data_size,     // Byte / Half / Word
+    input  logic [2:0]       data_size,     // Byte / Half / Word
 
     output logic [XLEN-1:0]  instr_rdata,   // Fetched instruction word
     output logic [XLEN-1:0]  data_rdata,    // Load read data
@@ -87,7 +87,7 @@ module rv32_ahb_lite_master (
             HADDR  = data_addr;
             HWRITE = data_write;
             HTRANS = AHB_NONSEQ;  // Single transfer
-            unique case (data_size)
+            case (data_size)
                 MEM_BYTE, MEM_BYTE_U: HSIZE = AHB_SIZE_BYTE;
                 MEM_HALF, MEM_HALF_U: HSIZE = AHB_SIZE_HALF;
                 default:              HSIZE = AHB_SIZE_WORD;

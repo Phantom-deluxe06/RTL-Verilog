@@ -34,9 +34,9 @@ module rv32_control_unit (
     output logic             jump,          // JAL or JALR
     output logic             is_jalr,       // Specifically JALR (base = rs1)
     output imm_type_e        imm_type,      // Immediate format
-    output mem_size_e        mem_size,      // Byte / Half / Word access
+    output logic [2:0]       mem_size,      // Byte / Half / Word access
     output logic             m_valid,       // M-extension operation valid
-    output m_op_e            m_op           // M-extension operation select
+    output logic [2:0]       m_op           // M-extension operation select
 );
 
     // Instruction field extraction
@@ -63,11 +63,11 @@ module rv32_control_unit (
         jump       = 1'b0;
         is_jalr    = 1'b0;
         imm_type   = IMM_I;
-        mem_size   = MEM_WORD;
+        mem_size   = 3'b010;
         m_valid    = 1'b0;
-        m_op       = M_MUL;
+        m_op       = 3'b000;
 
-        unique case (opcode)
+        case (opcode)
 
             // =============================================================
             // LUI — Load Upper Immediate
@@ -158,7 +158,7 @@ module rv32_control_unit (
                 imm_type  = IMM_I;
                 wb_sel    = WB_ALU;
 
-                unique case (funct3)
+                case (funct3)
                     3'b000: alu_op = ALU_ADD;   // ADDI
                     3'b010: alu_op = ALU_SLT;   // SLTI
                     3'b011: alu_op = ALU_SLTU;  // SLTIU
@@ -190,7 +190,7 @@ module rv32_control_unit (
                     wb_sel   = WB_MEXT;
                 end else begin
                     // ---- Base RV32I register-register ----
-                    unique case (funct3)
+                    case (funct3)
                         3'b000: begin
                             if (funct7[5]) alu_op = ALU_SUB;
                             else           alu_op = ALU_ADD;

@@ -27,7 +27,7 @@ module rv32_branch_unit (
         branch_taken = 1'b0;
 
         if (branch_en) begin
-            unique case (funct3)
+            case (funct3)
                 3'b000: branch_taken = (rs1_data == rs2_data);            // BEQ
                 3'b001: branch_taken = (rs1_data != rs2_data);            // BNE
                 3'b100: branch_taken = (rs1_signed <  rs2_signed);        // BLT

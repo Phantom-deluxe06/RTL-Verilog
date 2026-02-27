@@ -1,0 +1,12 @@
+rtl/pkg_rv32_types.sv
+rtl/rv32_pc.sv
+rtl/rv32_register_file.sv
+rtl/rv32_imm_gen.sv
+rtl/rv32_alu.sv
+rtl/rv32_m_extension.sv
+rtl/rv32_control_unit.sv
+rtl/rv32_branch_unit.sv
+rtl/rv32_ahb_lite_master.sv
+rtl/rv32_core.sv
+rtl/rv32_soc_top.sv
+tb/rv32_tb.sv

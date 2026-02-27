@@ -30,7 +30,7 @@ import pkg_rv32_types::*;
 
 module rv32_m_extension (
     input  logic             m_valid,      // Enable — 0 = block is inactive
-    input  m_op_e            m_op,         // Operation select (funct3)
+    input  logic [2:0]       m_op,         // Operation select (funct3)
     input  logic [XLEN-1:0]  operand_a,   // rs1
     input  logic [XLEN-1:0]  operand_b,   // rs2
 
@@ -56,7 +56,7 @@ module rv32_m_extension (
         m_result = {XLEN{1'b0}};
 
         if (m_valid) begin
-            unique case (m_op)
+            case (m_op)
                 // -------------------------------------------------------
                 // Multiplication
                 // -------------------------------------------------------
